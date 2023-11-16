@@ -1,0 +1,51 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Upload{% endblock title %}
+
+{% block main-content %}
+<div class="container">
+    <div class="row my-3">
+        <div class="col-sm-6 offset-sm-3">
+            <br><h3>Upload Books</h3><br>
+            <hr>
+            <form action="" method="post" novalidate class="shadow p-5">
+                <label for="textValue"><b>Title:</b></label>
+                <input type="text" id="textValue" name="textValue" required><br>
+                <hr><br>
+                <label for="numericValue"><b>Selling Price:</b></label>
+                <input type="number" name="numericValue" id="numericValue">
+                <hr><br>
+                <label for="numericValue"><b>Discounted Price:</b></label>
+                <input type="number" name="numericValue" id="numericValue">
+                <hr><br>
+                <label for="textareaValue"><b>Description:</b></label>
+                <textarea name="textareaValue" id="textareaValue" rows="4" cols="50"></textarea>
+                <hr><br>
+                <label for="textareaValue"><b>Composition:<b></label>
+                <textarea name="textareaValue" id="textareaValue" rows="4" cols="50"></textarea>
+                <hr><br>
+                <label for="textareaValue">Prodapp:</label>
+                <textarea name="textareaValue" id="textareaValue" rows="4" cols="50"></textarea>
+                <hr><br>
+                <label for="selectValue">Category:</label>
+                <select name="selectValue" id="selectValue">
+                    <option value="option1">1st to 4th grade</option>
+                    <option value="option2">5th to 7th grade</option>
+                    <option value="option3">8th to 10th grade</option>
+                    <option value="option3">Junior College</option>
+                    <option value="option3">Under Graduate</option>
+                    <option value="option3">Post Graduate</option>
+                    <option value="option3">Phd</option>
+                    <option value="option3">Miscellaneous</option>
+                </select>
+                <hr><br>
+                <label for="file">Product image:</label>
+                <input type="file" name="file" id="file">
+                <hr><br>
+                <input type="submit" value="Add Book" class="btn btn-primary"><br>
+            </form>
+        </div>
+        <br><br>
+    </div>
+</div>
+{% endblock main-content%}
