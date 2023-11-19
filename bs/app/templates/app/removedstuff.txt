@@ -1,0 +1,192 @@
+view:-
+
+
+'''class SubCategoryView(View):
+    def get(self, request,val):
+        subcategories = SubCategory.objects.filter(category=val)
+        #product = Product.objects.filter(category=val)
+        #title = Product.objects.filter(category=val).values('title')
+        return render(request, "app/subcategory.html", {'subcategory': subcategories})
+
+class CategoryView(View):
+    def get(self, request,val):
+        categories = Category.objects.all()
+        subcategories = SubCategory.objects.all()
+        #product = Product.objects.filter(category=val)
+        #title = Product.objects.filter(category=val).values('title')
+        return render(request, "app/category.html", {'categories': categories, 'subcategories': subcategories})'''
+'''class CategoryTitle(View):
+    def get(self, request, val): #subject name as parameter; initial-name of the book
+        standard = SubCategory.objects.filter(category=val)
+        subject = SubCategory.objects.filter(category=val)
+        product = Product.objects.filter(subcategory=subject)
+        #title = Product.objects.filter(category=product[0].category).values('title') #stores this for the title loop in category.html
+        return render(request, "app/category.html", locals())
+class CategoryTitle(View):
+    def get(self, request, val): #subject name as parameter; initial-name of the book
+        subject = SubCategory.objects.filter(category=val)
+        product = Product.objects.filter(subcategory=subject)
+        title = Product.objects.filter(category=product[0].category).values('title') #stores this for the title loop in category.html
+        return render(request, "app/category.html", locals())
+        
+class CategoryTitle(View): #version1
+    def get(self, request, val): # subject name as parameter; initial-name of the book
+        
+        subject = SubCategory.objects.filter(category=val)
+        product = Product.objects.filter(subcategory__in=subject)
+
+        title = None
+        if product:
+            title = Product.objects.filter(category=product[0].category).values('title')
+
+        return render(request, "app/category.html", locals())
+
+class CategoryTitle(View):#version2
+    def get(self, request, val):  # subject name as parameter; initial-name of the book
+        # Retrieve SubCategory based on id (val)
+        standard = SubCategory.objects.get(id=val).name if SubCategory.objects.filter(id=val).exists() else None
+
+        # Retrieve SubCategory objects based on category=val
+        subject = SubCategory.objects.filter(category=val)
+
+        # Retrieve Product objects based on subcategory=subject and category=standard
+        product = Product.objects.filter(subcategory__in=subject, category=standard)
+
+        # Retrieve titles based on category of the first product (if any)
+        title = Product.objects.filter(category=product[0].category).values('title') if product else None
+
+        return render(request, "app/category.html", locals())
+        
+class CategoryTitle(View): #version3
+    def get(self, request, val):  # subject name as parameter; initial-name of the book
+        # Retrieve SubCategory objects based on category=val
+        subject = SubCategory.objects.filter(category=val).first()
+        subject_name = subject.name if subject else None
+
+        # Retrieve SubCategory objects based on category=val
+        standard = SubCategory.objects.get(id=val).name if SubCategory.objects.filter(id=val).exists() else None
+
+        # Retrieve Product objects based on subcategory=subject and category=standard
+        product = Product.objects.filter(subcategory=subject, category=standard)
+
+        # Retrieve titles based on category of the first product (if any)
+        title = Product.objects.filter(category=product[0].category).values('title') if product else None
+
+        return render(request, "app/category.html", locals())'''
+        
+'''
+class CategoryTitle(View): #version4
+    def get(self, request, val):  # subject name as parameter; initial-name of the book
+        # Retrieve SubCategory objects based on category=val
+        print("Val:", val)
+        subject = SubCategory.objects.filter(id=val).first()
+        subject_name = subject.name if subject else None
+        print("subject:", subject)
+        print("its category is:", subject.category)
+        # Retrieve SubCategory objects based on name=val
+        standard = Category.objects.filter(name=subject.category).first()
+        standard_name = standard.name if standard else None
+        #print("standard:", standard)  
+        # Retrieve Product objects based on subcategory=subject and category=standard
+        #product = Product.objects.filter(subcategory=subject, category=val)
+        product = Product.objects.filter(subcategory=subject, category=standard)
+        print("product:", product)
+        # Retrieve titles based on category of the first product (if any)
+    
+        title = Product.objects.filter(category=product[0].category).values('title') if product else None
+
+        return render(request, "app/category.html", locals())
+'''
+
+
+models:-
+
+'''
+CATEGORY_CHOICES=(
+    ('OF','onetofour'),
+    ('FS','fivetoseven'),
+    ('ET','eighttoten'),
+    ('JC','juniorcollege'),
+    ('UG','undergrad'),
+    ('PG','postgrad'), 
+    ('PH','phd'),
+    ('MS','miscellaneous'),
+) 
+
+
+CATEGORY_CHOICES = (
+        ('onetofour', (
+            ('AA', 'Maths'),
+            ('AB', 'Science'),
+            ('AC', 'English'),
+            ('AD', 'SocialStudies'),
+            ('AE', 'Marathi'),
+            ('AF', 'Hindi'),
+        )),
+        ('fivetoseven', (
+            ('BA', 'Maths'),
+            ('BB', 'Science'),
+            ('BC', 'English'),
+            ('BD', 'SocialStudies'),
+            ('BE', 'Marathi'),
+            ('BF', 'Hindi'),
+        )),
+        ('eighttoten', (
+            ('CA', 'Maths'),
+            ('CB', 'Biology'),
+            ('CC', 'Chemistry'),
+            ('CD', 'Physics'),
+            ('CE', 'English'),
+            ('CF', 'Geography'),
+            ('CG', 'HistoryCivics'),
+            ('CH', 'Marathi'),
+            ('CI', 'Hindi'),
+        )),
+        ('juniorcollege', (
+            ('DA', 'Science'),
+            ('DB', 'Humanities'),
+            ('DC', 'Commerce'),
+            ('DD', 'FineArts'),
+            ('DE', 'Miscellaneous'),
+        )),
+        ('undergrad', (
+            ('EA', 'BCA'),
+            ('EB', 'BScIT'),
+            ('EC', 'BCS'),
+            ('ED', 'BCOM'),
+            ('EE', 'BA'),
+            ('EF', 'BMS'),
+            ('EG', 'BMM'),
+            ('EH', 'BSc'),
+        )),
+        ('postgrad', (
+            ('FA', 'MCA'),
+            ('FB', 'MScIT'),
+            ('FC', 'MScCS'),
+            ('FD', 'MCOM'),
+            ('FE', 'MBA'),
+            ('FF', 'MA'),
+            ('FG', 'MMS'),
+            ('FH', 'MSc'),
+        )),
+        ('phd', (
+            ('HA', 'English'),
+            ('HB', 'Philosophy'),
+            ('HC', 'EnvScience'),
+            ('HD', 'Biotechnology'),
+            ('HE', 'Botany'),
+            ('HF', 'Chemisry'),
+            ('HG', 'Mathematics'),
+            ('HH', 'Marathi'),
+            ('HI', 'Hindi'),
+            ('HJ', 'History'),
+            ('HK', 'Economics'),
+            ('HL', 'Geography'),
+            ('HM', 'Commerce'),
+            ('HN', 'Miscellaneous'),
+        )),
+        ('miscellaneous', (
+            ('HA', 'Diploma'),
+            ('HB', 'Miscellaneous'),
+        )),
+    ) '''

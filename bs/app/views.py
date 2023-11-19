@@ -1,9 +1,9 @@
 #from urllib import request
 #from django.http import HttpResponse
 from django.db.models import Count
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,reverse
 from django.views import View
-from . models import Cart, Customer, Product
+from . models import Cart, Customer, Product, Category, SubCategory
 from . forms import CustomerProfileForm,CustomerRegistrationForm
 from django.contrib import messages
 from django.http import JsonResponse
@@ -26,17 +26,39 @@ def upload(request):
 def payment_gateway(request):
     return render(request , "app/payment.html")
 
+
+class SubCategoryView(View):
+    def get(self, request,val): 
+        standard = SubCategory.objects.filter(category=val)
+        return render(request, "app/subcategory.html", locals())
 class CategoryView(View):
     def get(self, request,val):
         product = Product.objects.filter(category=val)
         title = Product.objects.filter(category=val).values('title')
         return render(request, "app/category.html", locals())
     
+
 class CategoryTitle(View):
-    def get(self, request, val):
-        product = Product.objects.filter(title=val)
-        title = Product.objects.filter(category=product[0].category).values('title')
+    def get(self, request, val):  # subject name as parameter; initial-name of the book
+        # Retrieve SubCategory object based on id=val
+        subcategory = SubCategory.objects.filter(id=val).first()
+        subject_name = subcategory.name if subcategory else None
+        print("subcategory:", subcategory)      
+        # Retrieve Category object based on the name of the category of the subcategory
+        standard = Category.objects.filter(name=subcategory.category).first()
+        category = subcategory.category if subcategory else None
+        category_name = category.name if category else None
+        print("category:", category.id)
+        # Retrieve Product objects based on subcategory=subcategory and category=category
+        product = Product.objects.filter(subcategory=subcategory, category=category)
+        print("products:", product)
+        # Retrieve titles based on category of the first product (if any)
+        #title = product.values('title') if product else None
+        title = SubCategory.objects.filter(category=standard.id)
+
         return render(request, "app/category.html", locals())
+
+
 class ProductDetail(View):
     def get(self,request,pk):
         product = Product.objects.get(pk=pk)
@@ -117,27 +139,32 @@ def show_cart(request):
     for c in cart:
         value = c.quantity * c.product.discounted_Price
         amount += value
-    totalamount = amount + 40
+    totalamount = amount 
     return render(request, 'app/addtocart.html',locals())
 
 def plus_cart(request):
     if request.method == 'GET':
         prod_id = request.GET['prod_id']
+        print("product id:", prod_id)
         c = Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
         c.quantity+=1
         c.save()
+        print("C: ",c)
+        print("C quantity: ",c.quantity)
+        newc = c.quantity
         user=request.user
         cart = Cart.objects.filter(user=user)
         amount = 0
         for c in cart:
             value = c.quantity * c.product.discounted_Price
             amount += value
-        totalamount = amount + 40
+        totalamount = amount 
         data = {
-            'quantity':c.quantity,
+            'quantity':newc,
             'amount':amount,
             'totalamount':totalamount
         }
+        print("data", data)
         return JsonResponse(data)
     
 def minus_cart(request):
@@ -146,15 +173,16 @@ def minus_cart(request):
         c = Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
         c.quantity-=1
         c.save()
+        newc = c.quantity
         user=request.user
         cart = Cart.objects.filter(user=user)
         amount = 0
         for c in cart:
             value = c.quantity * c.product.discounted_Price
             amount += value
-        totalamount = amount + 40
+        totalamount = amount 
         data = {
-            'quantity':c.quantity,
+            'quantity':newc,
             'amount':amount,
             'totalamount':totalamount
         }
@@ -171,7 +199,7 @@ def remove_cart(request):
         for c in cart:
             value = c.quantity * c.product.discounted_Price
             amount += value
-        totalamount = amount + 40
+        totalamount = amount 
         data = {
             'quantity':c.quantity,
             'totalamount':totalamount

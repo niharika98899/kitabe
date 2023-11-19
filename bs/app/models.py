@@ -1,25 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 # Create your models here.
 
-
-CATEGORY_CHOICES=(
-    ('OF','onetofour'),
-    ('FS','fivetoseven'),
-    ('ET','eighttoten'),
-    ('JC','juniorcollege'),
-    ('UG','undergrad'),
-    ('PG','postgrad'), 
-    ('PH','phd'),
-    ('MS','miscellanious'),
-)
 STATE_CHOICES=(
     ('Maharashtra', 'Maharashtra'),
     ('TN', 'TN'),
     ('MP', 'MP'),
-
 )
-
 '''
 STATUS_CHOICES = (
         ('Accepted', 'Accepted'),
@@ -51,14 +39,30 @@ class OrderPlaced(models.Model):
     def total_cost(self):
         return self.quantity * self.product.discounted_Price        '''
 
+
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+class SubCategory(models.Model):
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+    
 class Product(models.Model):
     title = models.CharField(max_length=100)
     selling_price = models.FloatField()
     discounted_Price = models.FloatField()
-    description = models.TextField()
-    composition = models.TextField(default='')
-    prodapp = models.TextField(default='')
-    category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
+    publisher = models.TextField()
+    description = models.TextField(default='')
+    #prodapp = models.TextField(default='')
+    #category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE, limit_choices_to={'category':models.F('category')})
     product_image = models.ImageField(upload_to = 'product')
     def __str__(self):
         return self.title
