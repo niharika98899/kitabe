@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField, PasswordChangeForm,SetPasswordForm,PasswordResetForm
 from django.contrib.auth.models import User
 
-from .models import Customer    
+from .models import Customer, Upload    
 
 class LoginForm(AuthenticationForm):
     username = UsernameField(widget = forms.TextInput(attrs={'autofocus':'True','class':'form-control'}))
@@ -43,3 +43,19 @@ class CustomerProfileForm(forms.ModelForm):
             'zipcode':forms.TextInput(attrs={'class':'form-control'}),
             
         }
+class Upload(forms.Form):
+    class Meta:
+        model = Upload
+        fields = ['category', 'other_field1', 'other_field2']
+    name = forms.CharField(max_length=255, required=True)
+    email = forms.EmailField(max_length=255, required=True)
+    title = forms.CharField(max_length=255, required=True)
+    selling_price = forms.IntegerField(required=True)
+    discounted_price = forms.IntegerField(required=True)
+    publisher = forms.CharField(max_length=1000, required=True)
+    description = forms.CharField(max_length=1000, required=True)
+    category = forms.CharField(widget=forms.Select(choices=Upload.CATEGORY_CHOICES), required=True)
+    subcategory = forms.CharField(widget=forms.Select(choices=Upload.SUBCATEGORY_CHOICES), required=True)
+    product_image = forms.ImageField(required=True)
+    
+ 

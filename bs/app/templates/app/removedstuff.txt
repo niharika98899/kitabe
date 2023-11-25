@@ -190,3 +190,7 @@ CATEGORY_CHOICES = (
             ('HB', 'Miscellaneous'),
         )),
     ) '''
+
+
+    POST request and GET request in view
+    

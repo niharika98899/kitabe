@@ -4,7 +4,7 @@ from django.db.models import Count
 from django.shortcuts import render,redirect,reverse
 from django.views import View
 from . models import Cart, Customer, Product, Category, SubCategory
-from . forms import CustomerProfileForm,CustomerRegistrationForm
+from . forms import CustomerProfileForm,CustomerRegistrationForm,Upload
 from django.contrib import messages
 from django.http import JsonResponse
 from django.db.models import Q
@@ -19,8 +19,29 @@ def about(request):
 def contact(request):
     return render(request , "app/contact.html")
 
+
 def upload(request):
-    return render(request , "app/upload.html")
+    if request.method == 'POST':
+        form = Upload(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']  
+            title = form.cleaned_data['title']  
+            selling_price = form.cleaned_data['selling_price']
+            discounted_price = form.cleaned_data['discounted_price']  
+            publisher = form.cleaned_data['publisher'] 
+            description = form.cleaned_data['description']  
+            category = form.cleaned_data['category']
+            subcategory = form.cleaned_data['subcategory'] 
+            product_image = form.cleaned_data['product_image']
+            
+            return render(request , "app/upload.html")
+    else:
+        form = Upload()
+    return render(request, 'app/upload.html', {'form': form})
+'''
+def upload(request):
+    return render(request , "app/upload.html")'''
 
 
 def payment_gateway(request):

@@ -86,3 +86,37 @@ class Cart(models.Model):
 	@property
 	def total_cost(self):
 		return self.quantity * self.product.discounted_price
+
+class Upload(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    title = models.CharField(max_length=100)
+    selling_price = models.FloatField()
+    discounted_price = models.FloatField()
+    publisher = models.CharField(max_length=1000)
+    description = models.CharField(max_length=1000)
+    
+    CATEGORY_CHOICES = [
+        ('1', '1st to 4th grade'),
+        ('2', '5th to 7th grade'),
+        ('3', '8th to 10th grade'),
+        ('4', 'Junior College'),
+        ('5', 'Under Graduate'),
+        ('6', 'Post Graduate'),
+        ('7', 'PHD'),
+        ('8', 'Miscellaneous'),
+    ]
+    
+    SUBCATEGORY_CHOICES = [
+        ('1', 'English'),
+        ('2', 'Maths'),
+        ('3', 'Science'),
+        ('4', 'History'),
+        ('5', 'Geography'),
+        ('6', 'Marathi'),
+        ('7', 'Hindi'),
+    ]
+
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
+    subcategory = models.CharField(max_length=20, choices=SUBCATEGORY_CHOICES)
+    product_image = models.ImageField(upload_to='images/')
