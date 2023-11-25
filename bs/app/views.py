@@ -140,6 +140,8 @@ def show_cart(request):
         value = c.quantity * c.product.discounted_Price
         amount += value
     totalamount = amount 
+    if totalamount == 0:
+        return render(request, 'app/addtocart.html',locals())
     return render(request, 'app/addtocart.html',locals())
 
 def plus_cart(request):
@@ -188,6 +190,16 @@ def minus_cart(request):
         }
         return JsonResponse(data)
     
+def search(request):
+        query = request.GET['search']
+        totalitem = 0
+        wishitem = 0
+        if request.user.is_authenticated:
+            totalitem = len(Cart.objects.filter(user=request.user))
+            '''wishitem = len(Wishlist.objects.filter(user=request.user))'''
+        product = Product.objects.filter(Q(title__icontains=query))
+        return render(request,"app/search.html",locals())
+    
 def remove_cart(request):
     if request.method == 'GET':
         prod_id = request.GET['prod_id']
@@ -202,6 +214,7 @@ def remove_cart(request):
         totalamount = amount 
         data = {
             'quantity':c.quantity,
+            'amount':amount,
             'totalamount':totalamount
         }
         return JsonResponse(data)
