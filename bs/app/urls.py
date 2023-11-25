@@ -24,6 +24,8 @@ urlpatterns = [
     path('checkout/', views.show_cart, name='checkout'),
     path('payment/', views.payment_gateway, name='payment'),
     
+    path('search/',views.search,name='search'),
+    
     path('pluscart/', views.plus_cart),
     path('minuscart/', views.minus_cart),
     path('removecart/', views.remove_cart),
