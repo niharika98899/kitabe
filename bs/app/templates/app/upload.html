@@ -8,7 +8,17 @@
         <div class="col-sm-6 offset-sm-3">
             <br><h3>Upload Books</h3><br>
             <hr>
+            
+
             <form action="" method="post" novalidate class="shadow p-5">
+              {% csrf_token %}
+                {% for fm in form %}
+                    <b>{{fm.label_tag}}</b> {{fm}} <small class="text-danger">{{fm.errors|striptags}}</small>
+                    <br><br>
+                {% endfor %}
+                <input type="submit" value="Add Book" class="btn btn-primary"><br>
+                <!--
+                <input type="submit" value="Submit" class="btn btn-primary"><br>
                 <label for="textValue"><b>Title:</b></label>
                 <input type="text" id="textValue" name="textValue" required><br>
                 <hr><br>
@@ -19,12 +29,6 @@
                 <input type="number" name="numericValue" id="numericValue">
                 <hr><br>
                 <label for="textareaValue"><b>Description:</b></label>
-                <textarea name="textareaValue" id="textareaValue" rows="4" cols="50"></textarea>
-                <hr><br>
-                <label for="textareaValue"><b>Composition:<b></label>
-                <textarea name="textareaValue" id="textareaValue" rows="4" cols="50"></textarea>
-                <hr><br>
-                <label for="textareaValue">Prodapp:</label>
                 <textarea name="textareaValue" id="textareaValue" rows="4" cols="50"></textarea>
                 <hr><br>
                 <label for="selectValue">Category:</label>
@@ -38,14 +42,71 @@
                     <option value="option3">Phd</option>
                     <option value="option3">Miscellaneous</option>
                 </select>
-                <hr><br>
+                <label for="selectValue">Category:</label>
+                <select id="select1" onchange="showSubcategories()">
+                    <option value="">- Select a Category -</option>
+                    <option value="category1">Category 1</option>
+                    <option value="category2">Category 2</option>
+                    <option value="category3">Category 3</option>
+                    <option value="category4">Category 4</option>
+                    <option value="category5">Category 5</option>
+                    <option value="category6">Category 6</option>
+                    <option value="category7">Category 7</option>
+                    <option value="category8">Category 8</option>
+                  </select>
+            
+                  <div id="subcategories1">
+                    <select id="subcategory11">
+                      <option value="">- Select a Subcategory  -</option>
+                      <option value="sub111">Maths</option>
+                      <option value="sub112">Science</option>
+                      <option value="sub113">English</option>
+                      <option value="sub114">Social Science</option>
+                      <option value="sub115">Hindi</option>
+                      <option value="sub116">Marathi</option>
+                     
+                    </select>
+              
+                  </div>
+                  
+                  <div id="subcategories2">
+                    <select id="subcategory21">
+                      <option value="">- Select a Subcategory  -</option>
+                        <option value="sub211">Maths</option>
+                        <option value="sub212">Science</option>
+                        <option value="sub213">English</option>
+                        <option value="sub214">Social Science</option>
+                        <option value="sub215">Hindi</option>
+                        <option value="sub216">Marathi</option>
+                    </select>
+
+                  </div>
                 <label for="file">Product image:</label>
                 <input type="file" name="file" id="file">
                 <hr><br>
-                <input type="submit" value="Add Book" class="btn btn-primary"><br>
+                <input type="submit" value="Add Book" class="btn btn-primary"><br>-->
             </form>
         </div>
         <br><br>
     </div>
 </div>
+        
+<!--<script>
+    function showSubcategories() {
+      const selectedCategory = document.getElementById('select1').value;
+      const subcategories1 = document.getElementById('subcategories1');
+      const subcategories2 = document.getElementById('subcategories2');
+  
+      if (selectedCategory === 'category1') {
+        subcategories1.style.display = 'block';
+        subcategories2.style.display = 'none';
+      } else if (selectedCategory === 'category2') {
+        subcategories2.style.display = 'block';
+        subcategories1.style.display = 'none';
+      } else {
+        subcategories1.style.display = 'none';
+        subcategories2.style.display = 'none';
+      }
+    }
+  </script>-->
 {% endblock main-content%}

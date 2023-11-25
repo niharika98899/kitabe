@@ -12,6 +12,7 @@ urlpatterns = [
     path('contact/',views.contact,name="contact"),
     path('upload/', views.upload, name = "upload"),
     path('category/<slug:val>',views.CategoryView.as_view(), name="category"),
+    path('subcategory/<slug:val>',views.SubCategoryView.as_view(), name="subcategory"),
     path("category-title/<val>", views.CategoryTitle.as_view(),name="category-title"),
     path('product-detail/<int:pk>',views.ProductDetail.as_view(), name="product-detail"),
     path('profile/', views.ProfileView.as_view(), name='profile'),
