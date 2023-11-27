@@ -33,12 +33,7 @@ $('.remove-cart').click(function(){
             eml.parentNode.parentNode.parentNode.parentNode.remove()
             window.location.href = '../../../templates/app/addtocart.html';
             console.log("working")
-
-            if (data.amount === 0) {
-                location.reload();
-            }
         }
-
         
     })
 })

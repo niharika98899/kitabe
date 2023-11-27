@@ -189,4 +189,17 @@ CATEGORY_CHOICES = (
             ('HA', 'Diploma'),
             ('HB', 'Miscellaneous'),
         )),
+<<<<<<< Updated upstream
     ) '''
+=======
+    ) '''
+
+
+    POST request and GET request in view
+    
+
+    
+    
+
+      
+>>>>>>> Stashed changes

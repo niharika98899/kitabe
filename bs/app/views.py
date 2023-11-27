@@ -151,8 +151,6 @@ def plus_cart(request):
         c = Cart.objects.get(Q(product=prod_id) & Q(user=request.user))
         c.quantity+=1
         c.save()
-        print("C: ",c)
-        print("C quantity: ",c.quantity)
         newc = c.quantity
         user=request.user
         cart = Cart.objects.filter(user=user)
